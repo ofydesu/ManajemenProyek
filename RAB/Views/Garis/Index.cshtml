@@ -1,0 +1,48 @@
+﻿@model IEnumerable<RAB.Models.Utama.Garis>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nama)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Arah)
+            </th>
+            <th>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ 
+            int No = 1;
+        }
+@foreach (var item in Model) {
+        <tr>
+            <td>@No</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nama)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Arah)
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+        </tr>
+    No++;
+}
+    </tbody>
+</table>

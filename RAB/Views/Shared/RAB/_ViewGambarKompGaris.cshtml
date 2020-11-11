@@ -1,0 +1,54 @@
+﻿@model RAB.Models.View.MVGambarGarisValid
+
+
+@{
+/*refrensi1: https://www.w3schools.com/graphics/svg_path.asp*/
+/*refrensi2 https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths*/
+/*refrensi3 http://tutorials.jenkov.com/svg/text-element.html */
+
+int tambah4Text = 100;
+decimal skalaInzet = 0.25M;
+
+tambah4Text = Decimal.ToInt32(tambah4Text * skalaInzet);
+
+int tinggi = Model.TinggiMax + (2 * tambah4Text);
+int lebar = Model.LebarMax + (2 * tambah4Text);
+
+int fontSize = Decimal.ToInt32(20 * skalaInzet);
+int deEx = Decimal.ToInt32(tambah4Text / 3);
+int deYe = Decimal.ToInt32(tambah4Text / 12);
+int deYe4eX1 = Decimal.ToInt32(tambah4Text / 2);
+int deYe4eX = Decimal.ToInt32(tambah4Text / 2);
+
+}
+
+<svg height="@tinggi" width="@lebar">
+
+    @foreach (var item in Model.LstGarisReal)
+    {
+        var X1 = Decimal.ToInt32(item.KoordAwal.TitikX.PosRel * skalaInzet) + tambah4Text;
+        var Y1 = Decimal.ToInt32(item.KoordAwal.TitikY.PosRel * skalaInzet) + tambah4Text;
+        var X2 = Decimal.ToInt32(item.KoordAkhir.TitikX.PosRel * skalaInzet) + tambah4Text;
+        var Y2 = Decimal.ToInt32(item.KoordAkhir.TitikY.PosRel * skalaInzet) + tambah4Text;
+
+        var tolTip = item.Nama;
+        tolTip += " p:" + item.Panjang + " " + item.Satuan;
+
+        string warna = "blue";
+        @if(item.GarisId == ViewBag.GarisTerpilih)
+        {
+            warna = "red";
+        }
+
+    <a onclick="sesuaikanTampilanGaris('@Url.Action("KompGaris","Gambar",new {polaId= @Model.PolaId,garisId= @item.GarisId},Context.Request.Scheme)')">
+
+        <line x1="@X1" y1="@Y1" x2="@X2" y2="@Y2"
+              stroke="@warna" stroke-width="3"
+              data-toggle="tooltip" title="garis @tolTip" class="pilihGaris" />
+
+    </a>
+            <circle id="@item.KoordAwal.Nama" cx="@X1" cy="@Y1" r="4" stroke="blue" fill="red" />
+            <circle id="@item.KoordAkhir.Nama" cx="@X2" cy="@Y2" r="4" stroke="blue" fill="red" />
+            }
+
+    </svg>

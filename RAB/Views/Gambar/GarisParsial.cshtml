@@ -1,0 +1,104 @@
+﻿@model RAB.Models.View.MVGambarGarisParsial
+
+@{
+    ViewData["Title"] = "Gambar";
+    Layout = null;
+}
+
+<div>
+    <form method="get" asp-action="KompGaris"
+          data-ajax="true" data-target="#tblTampil" id="frmTarget">
+        <div class="input-group input-group-lg">
+            <div class="btn btn-primary input-group-prepend">
+                <a class="text-dark" href="@Url.Action("KompGaris","Gambar",new {id = "" })" id="btnLink">Garis Valid</a>
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text">Komponen pada Garis @ViewBag.GarisNama</span>
+            </div>
+            <select name="skl" id="pilihSkala" class="input-group-prepend pilihGambar" asp-items="ViewBag.ListSkala">
+                <option selected="selected" value=""></option>
+            </select>
+            <div class="btn btn-primary input-group-append">
+                <a class="text-dark" href="@Url.Action("Index","Gambar",new {id = "" })" id="btnLink">Gambar</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr />
+<div id="tblTampil">
+    @if (Model.GarisReal != null)
+    {
+        <partial name="RAB/_ViewGambarGarisParsial" model="Model" />
+    }
+    else
+    {
+
+        <div class="text-center">
+            <svg height="500" width="500">
+                <path id="lineAB" d="M 100 100 h 300 v 50 h -50
+            q -100 100 50 200
+            h-75
+            q -100 -100 -25 -200
+            h-75
+            l -75 200
+            h-50
+            l 75 -200
+            h-65
+            l -50 -50
+            z
+            "
+                      stroke="black" stroke-width="10" fill="gold" />
+
+                <path d="M 106 330
+           A 170 170, 0, 0, 1, 380 100
+           h -70
+           A 130 130, 1, 0, 0, 126 280
+           z
+	  " stroke="black" stroke-width="10" fill="red" />
+
+                <path d="M 150 355
+  			h-5
+           A 170 170, 180, 0, 0, 400 150
+           h -45
+           A 130 130, 0, 0, 1, 165 315
+           z
+	  " stroke="black" stroke-width="10" fill="red" />
+
+            </svg>
+        </div>
+
+    }
+</div>
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ajaxFormSubmit = function () {
+                var $form = $(this);
+                var option = {
+                    url: $form.attr("action"),
+                    type: $form.attr("method"),
+                    data: $form.serialize()
+                };
+                $.ajax(option).done(function (data) {
+                    var $target = $("#tblTampil");
+                    $target.html(data);  //.replaceWith(data);
+                });
+
+                return false;
+            };
+            var submitForm = function (event, ui) {
+                var $input = $(this);
+                var $form = $input.parents("form:first");
+                $form.submit();
+            };
+            $("form[data-ajax='true']").submit(ajaxFormSubmit);
+            $(".pilihGambar").change(submitForm);
+            //$(".pilihGambar").change(function () {
+            //    alert("pilih gambar");
+            //});
+
+        });
+    </script>
+}

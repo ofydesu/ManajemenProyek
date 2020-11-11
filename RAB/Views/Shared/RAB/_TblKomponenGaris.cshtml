@@ -1,0 +1,69 @@
+﻿@model IEnumerable<RAB.Models.Utama.KomponenGaris>
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Garis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.KompId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PosRelatif)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PosRelX)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PosRelY)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int No = 1;
+            }
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @No
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Garis.Nama)
+                </td>
+                <td>
+                    Bag @Html.DisplayFor(modelItem => item.PosRelatifDiZ)
+                    <b>@Html.DisplayFor(modelItem => item.PolaKomponen.Komponen.Nama)</b>
+                    <br />Berada di <b>@Html.DisplayFor(modelItem => item.TitikZ.Nama)</b>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PosRelatif)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PosRelX)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PosRelY)
+                </td>
+                <td>
+                    <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","KomponenGaris",new { id=item.KompGrsId,add=false},Context.Request.Scheme)','Rubah Komponen Garis')"
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="fa fa-marker fa-sm"> Edit</i>
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.KompGrsId" onsubmit="return jQueryAjaxDeleteSimple(this)" class=" d-inline">
+                        <input type="submit" value="Hapus" class="btn btn-sm btn-danger" />
+                    </form>
+                </td>
+            </tr>
+                No++;
+            }
+        </tbody>
+    </table>
+</div>

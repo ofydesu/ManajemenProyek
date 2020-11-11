@@ -1,0 +1,58 @@
+﻿@model IEnumerable<RAB.Models.Utama.KomponenPola>
+
+@{
+    var komp = Model.FirstOrDefault();
+    int polaId = 0;
+    if (komp != null)
+    {
+        polaId = (int)komp.PolaId;
+    }
+    if (ViewBag.PolaId != null)
+    {
+        polaId = ViewBag.PolaId;
+    }
+}
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Komponen)
+                </th>
+                <th>
+                    <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","KomponenPola",new { id=polaId, add= true},Context.Request.Scheme)','Komponen Baru')"
+                       class="btn btn-outline-success" id="btnAdd">
+                        <i class="far fa-plus-square"> Tambah Komponen</i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int No = 1;
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @No
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Komponen.Nama)
+                    </td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.KomPolId" onsubmit="return jQueryAjaxDelete(this)" class=" d-inline">
+                            <input type="submit" value="Hapus" class="btn btn-sm btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+                No++;
+            }
+        </tbody>
+    </table>
+
+</div>

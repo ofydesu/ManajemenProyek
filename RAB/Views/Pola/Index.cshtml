@@ -1,0 +1,20 @@
+﻿@model IEnumerable<RAB.Models.Utama.Pola>
+
+@{
+    ViewData["Title"] = "Pola";
+}
+
+<div class="input-group input-group-lg">
+    <div class="input-group-prepend">
+        <span class="input-group-text">DAFTAR POLA </span>
+    </div>
+    <div class="btn btn-primary input-group-append">
+        <a class="text-dark" href="@Url.Action("Index","Titik",new {id = "" })" id="btnLink">Isian Grid</a>
+    </div>
+</div>
+
+<div id="tblTampil">
+    <partial name="RAB/_TblPola" model="Model" />
+</div>
+
+

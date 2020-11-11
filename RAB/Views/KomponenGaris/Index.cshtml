@@ -1,0 +1,107 @@
+﻿@model IEnumerable<RAB.Models.Utama.KomponenGaris>
+
+<div>
+    <div class="col-md-12">
+        <form method="post" action="/KomponenGaris/Index"
+              data-ajax="true" data-target="#tblTampil" id="frmAjax">
+                <input type="hidden" name="dariForm" id="dariForm" value="true" />
+            <div class="input-group input-group-sm">
+                <div class="btn btn-primary input-group-prepend">
+                    <a class="text-dark" href="@Url.Action("Index","Pola",new {id = "" })" id="btnLink">Pola</a>
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">KOMPONEN GARIS </span>
+                </div>
+                <div class="form-row" id="groupSelect">
+
+                    <select name="PolaId" id="pilihPola" class="gantiSelect form-control" asp-items="ViewBag.PolaId">
+                        <option selected="selected" value="">Pilih Pola Utama...</option>
+                    </select>
+                    <select name="GrsId" id="pilihGaris" class="gantiSelect form-control" asp-items="ViewBag.GarisId">
+                        <option selected="selected" value="">Pilih Garis...</option>
+                    </select>
+
+                    @*<partial name="RAB/KompGaris/_PilihanPola" model="Model" />*@
+                </div>
+                @*<div class="btn btn-primary input-group-append">
+                    <a class="text-dark" href="@Url.Action("Index","Koordinat",new {id = "" })" id="btnLink">Tabel Koordinat</a>
+                </div>*@
+            </div>
+            <div class="btn btn-light btnTambah text-center col-md-12 input-group-sm">
+                <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","KomponenGaris",new { id=0, add= true},Context.Request.Scheme)','Komponen Baru')"
+                   class="btn btn-outline-success btn-sm" id="btnAdd">
+                    <i class="far fa-plus-square"> Tambah Komponen Garis</i>
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<div id="tblTampil">
+    <partial name="RAB/_TblKomponenGaris" model="Model" />
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(".btnTambah").hide();
+            $("#pilihGaris").change(function () {
+
+                if ($(this).val() > 0) {
+                    $(".btnTambah").show();
+                } else {
+                    $(".btnTambah").hide();
+                }
+            });
+
+            $("#pilihPola").change(function () {
+                //alert("ok");
+                $.getJSON("KomponenGaris/GetLstGaris", { polaId: $(this).val() }, function (data) {
+                    var items = "<option value = ''>....Pilih Garis ....</option>";
+                    var selected = "";
+                    $("#pilihGaris").empty();
+                    $.each(data, function (i, obyek) {
+                        //alert(obyek.text)
+                        obyek.selected ? selected = "selected='selected'" : selected = "";
+                        items += "<option value='" + obyek.value + "' " + selected + " >" + obyek.text + "</option>";
+                    });
+                    $("#pilihGaris").html(items);
+                    //alert(data.html);
+                    //alert("ok");
+                });
+            });
+
+            var ajaxFormSubmit = function () {
+                var $form = $(this);
+                var option = {
+                    url: $form.attr("action"),
+                    type: $form.attr("method"),
+                    data: $form.serialize()
+                };
+                $.ajax(option).done(function (data) {
+                    var $target = $("#tblTampil");
+                    $target.html(data);  //.replaceWith(data);
+                });
+
+                return false;
+            };
+            var submitForm = function (event, ui) {
+                var $input = $(this);
+                var $form = $input.parents("form:first");
+                    //simpan nilai garis
+                    //$.getJSON("KomponenGaris/SetSesGaris", { grsId: $("#pilihGaris").val() }, function () { });
+                    $form.submit();
+            };
+
+            $("form[data-ajax='true']").submit(ajaxFormSubmit);
+            $(".gantiSelect").change(submitForm);
+
+
+        });
+
+        </script>
+}

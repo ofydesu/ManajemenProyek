@@ -1,0 +1,40 @@
+﻿@model RAB.Models.Utama.KomponenKoordinat
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+
+<h4 class="text-center">Untuk Koordinat @ViewBag.KoorNama </h4>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddOrEdit" asp-route-id="@Model.KompKoorId" onsubmit="return jQueryAjaxPostSimple(this);" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="KompKoorId" />
+            <input type="hidden" asp-for="KoorId" />
+
+            <div class="form-group">
+                <label asp-for="KompId" class="control-label"></label>
+                <select asp-for="KompId" class="form-control" asp-items="ViewBag.KompId"></select>
+                <span asp-validation-for="KompId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosAtasId" class="control-label"></label>
+                <select asp-for="PosAtasId" class="form-control" asp-items="ViewBag.PosAtasId"></select>
+                <span asp-validation-for="PosAtasId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosBawahId" class="control-label"></label>
+                <select asp-for="PosBawahId" class="form-control" asp-items="ViewBag.PosBawahId"></select>
+                <span asp-validation-for="PosBawahId" class="text-danger"></span>
+            </div>
+            <div class="form-group ">
+                <input type="submit" value="Kirim" class="btn btn-primary col-md-12" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

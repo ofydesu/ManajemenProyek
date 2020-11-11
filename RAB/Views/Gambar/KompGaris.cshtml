@@ -1,0 +1,88 @@
+﻿@model RAB.Models.View.MVGambarKompGaris
+
+@{
+    ViewData["Title"] = "Gambar";
+
+    bool valid = false;
+    if (Model.GarisValid != null)
+    {
+        if (Model.GarisValid.LstGarisReal != null) { valid = true; }
+    }
+    bool parsial = false;
+    if (Model.GarisParsial != null)
+    {
+        if (Model.GarisParsial.GarisReal != null) { parsial = true; }
+    }
+}
+
+<div>
+    <form method="get" asp-action="KompGaris"
+          data-ajax="true" data-target="#tblTampil" id="frmTarget">
+        <div class="input-group input-group-lg">
+            <div class="btn btn-primary input-group-prepend">
+                <a class="text-dark" href="@Url.Action("Index","Gambar",new {id = "" })" id="btnLink">Gambar Garis</a>
+            </div>
+            <div class="input-group-prepend">
+                <span class="input-group-text">Komponen Garis di Pola @ViewBag.PolaNama</span>
+            </div>
+            <select name="skl" id="pilihSkala" class="input-group-prepend pilihGambar" asp-items="ViewBag.ListSkala">
+                <option selected="selected" value=""></option>
+            </select>
+            <div class="btn btn-primary input-group-append">
+                <a class="text-dark" href="@Url.Action("GarisParsial","Gambar",new {id = "" })" id="btnLink">Garis Parsial</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<hr />
+
+<div class="container-fluid">
+        <div class="row">
+            <div id="tblInzet" class="sidenav">
+                @if (valid)
+                {
+                    <partial name="RAB/_ViewGambarKompGaris" model="Model.GarisValid" />
+                }
+            </div>
+            <div id="tblTampil" class="main">
+                @if (parsial)
+                {
+                    <partial name="RAB/_ViewGambarGarisParsial" model="Model.GarisParsial" />
+                }
+            </div>
+        </div>
+    </div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var ajaxFormSubmit = function () {
+                var $form = $(this);
+                var option = {
+                    url: $form.attr("action"),
+                    type: $form.attr("method"),
+                    data: $form.serialize()
+                };
+                $.ajax(option).done(function (data) {
+                    var $target = $("#tblTampil");
+                    $target.html(data);  //.replaceWith(data);
+                });
+
+                return false;
+            };
+            var submitForm = function (event, ui) {
+                var $input = $(this);
+                var $form = $input.parents("form:first");
+                $form.submit();
+            };
+            $("form[data-ajax='true']").submit(ajaxFormSubmit);
+            $("#pilihSkala").change(submitForm);
+            //$('[data-toggle="tooltip"]').tooltip();
+
+
+        });
+    </script>
+}

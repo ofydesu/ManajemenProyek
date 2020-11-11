@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RAB.Models.Utama.Koordinat>
+
+<div id="tblTampil">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nama)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TidakKeX)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TidakKeY)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MiringAtas)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MiringBawah)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.KiriBawahSemu)
+                </th>
+                <th>
+                    @*<a asp-action="BuatBaru" asp-route-id="@ViewBag.PolaId" class="btn btn-outline-success"><i class="fa fa-refresh"> Perbaharui</i></a>*@
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int No = 1;
+
+            }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@No</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nama)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TidakKeX)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TidakKeY)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MiringAtas)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MiringBawah)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.KiriBawahSemu)
+                    </td>
+                    <td>
+                        <a onclick="tampilDiPopUp('@Url.Action("Edit","Koordinat",new { id=item.KoordId, polaId=item.TitikX.PolaId },Context.Request.Scheme)','Rubah Koordinat')"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fa fa-marker fa-sm"> Edit</i>
+                        </a>
+                    </td>
+                </tr>
+                No++;
+            }
+        </tbody>
+    </table>
+
+</div>

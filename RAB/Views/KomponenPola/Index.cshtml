@@ -1,0 +1,62 @@
+﻿@model IEnumerable<RAB.Models.Utama.KomponenPola>
+
+
+<div>
+    <div class="col-mb-3">
+        <form method="get" action="/KomponenPola/Index"
+              data-ajax="true" data-target="#tblTampil" id="frmAjax">
+
+            <div class="input-group input-group-lg">
+                <div class="btn btn-primary input-group-prepend">
+                    <a class="text-dark" href="@Url.Action("Index","Pola",new {id = "" })" id="btnLink">Pola</a>
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">KOMPONEN POLA </span>
+                </div>
+                <select name="id" id="pilihPola" class="form-control" asp-items="ViewBag.ListPola">
+                    <option selected="selected" value="">Pilih Pola Utama...</option>
+                </select>
+
+                <div class="btn btn-primary input-group-append">
+                    <a class="text-dark" href="@Url.Action("Index","Koordinat",new {id = "" })" id="btnLink">Tabel Koordinat</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<div id="tblTampil">
+    <partial name="RAB/_TblKomponenPola" model="Model" />
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+            $(document).ready(function () {
+                var ajaxFormSubmit = function () {
+                    var $form = $(this);
+                    var option = {
+                        url: $form.attr("action"),
+                        type: $form.attr("method"),
+                        data: $form.serialize()
+                    };
+                    $.ajax(option).done(function (data) {
+                        var $target = $("#tblTampil");
+                        $target.html(data);  //.replaceWith(data);
+                    });
+
+                    return false;
+                };
+                var submitForm = function (event, ui) {
+                    var $input = $(this);
+                    var $form = $input.parents("form:first");
+                    $form.submit();
+                };
+                $("form[data-ajax='true']").submit(ajaxFormSubmit);
+                $("#pilihPola").change(submitForm);
+
+            });
+    </script>
+}

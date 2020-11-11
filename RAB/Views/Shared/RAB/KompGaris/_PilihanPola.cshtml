@@ -1,0 +1,14 @@
+﻿@model IEnumerable<RAB.Models.Utama.KomponenGaris>
+@*<form method="get" action="/KomponenGaris/PilihanPola"
+    data-ajax="true" data-target="#groupSelect" id="frmAjax2">*@
+
+<select name="PolaId" id="pilihPola" class="gantiSelect form-control" asp-items="ViewBag.PolaId">
+    <option selected="selected" value="">Pilih Pola Utama...</option>
+</select>
+<select name="GarisId" class="gantiSelect form-control" asp-items="ViewBag.GarisId">
+    <option selected="selected" value="">Pilih Garis...</option>
+</select>
+
+@*</form>*@
+
+

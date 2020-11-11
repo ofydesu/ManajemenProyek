@@ -1,0 +1,86 @@
+﻿@model IEnumerable<RAB.Models.Utama.Titik>
+
+@{
+    var grd =  Model.FirstOrDefault();
+    int polaId = 0;
+    if (grd != null)
+    {
+        polaId = grd.PolaId;
+    }
+    if (ViewBag.PolaId != null)
+    {
+        polaId = ViewBag.PolaId;
+    }
+}
+<div>
+    <table class="table table-hover  table-striped table-condensed table-responsive">
+        <thead>
+            <tr>
+                <th>
+                    No
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sumbu)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SumbuId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nama)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Jarak)
+                </th>
+                <th>
+                    <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","Titik",new { id=polaId, add= true},Context.Request.Scheme)','Grid Baru')"
+                       class="btn btn-outline-success" id="btnAdd">
+                        <i class="far fa-plus-square"> Tambah Grid</i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int No = 1;
+            }
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @No
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sumbu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SumbuId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nama)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Jarak)  @item.Pola.SatuanPenyusun
+                    </td>
+                    <td>
+                        <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","Titik",new { id=item.TtkId,add=false},Context.Request.Scheme)','Rubah Grid')"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="fa fa-marker fa-sm"> Edit</i>
+                        </a>
+                        <form asp-action="Delete" asp-route-id="@item.TtkId" onsubmit="return jQueryAjaxDelete(this)" class=" d-inline">
+                            <input type="submit" value="Hapus" class="btn btn-sm btn-danger" />
+                        </form>
+                    </td>
+                </tr>
+                No++;
+            }
+        </tbody>
+    </table>
+    <div class="row">
+        <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","Titik",new { id=polaId},Context.Request.Scheme)','Grid Baru')"
+           class="btn btn-outline-success" id="btnAdd">
+            <i class="far fa-plus-square"> Tambah Grid</i>
+        </a>
+    </div>
+</div>
+

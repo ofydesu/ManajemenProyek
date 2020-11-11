@@ -1,0 +1,56 @@
+﻿@model RAB.Models.Utama.Pola
+@using RAB.Asset.Enum
+@{
+    ViewData["Title"] = "Form Pola";
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="AddOrEdit" asp-route-id="@Model.PolaId" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PolaId" />
+            <div class="form-group">
+                <label asp-for="Nama" class="control-label"></label>
+                <input asp-for="Nama" class="form-control" />
+                <span asp-validation-for="Nama" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label asp-for="Status" class="control-label"></label>
+                    <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<EStatusPola>()">
+                        <option selected="selected" value="">Pilih Status Pola</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SatuanPenyusun" class="control-label"></label>
+                    <select asp-for="SatuanPenyusun" class="form-control" asp-items="Html.GetEnumSelectList<ESat1D>()">
+                        <option selected="selected" value="">Pilih Satuan</option>
+                    </select>
+                    <span asp-validation-for="SatuanPenyusun" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Posisi3D" class="control-label"></label>
+                <select asp-for="Posisi3D" class="form-control" asp-items="Html.GetEnumSelectList<EPosisi3D>()">
+                    <option selected="selected" value="">Pilih Posisi</option>
+                </select>
+                <span asp-validation-for="Posisi3D" class="text-danger"></span>
+            </div>
+
+            <div class="raw">
+                <div>
+                    <div class="form-group">
+                        <input type="submit" value="Kirim" class="btn btn-primary col-md-12" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

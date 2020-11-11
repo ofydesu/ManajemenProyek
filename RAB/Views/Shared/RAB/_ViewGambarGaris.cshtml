@@ -1,0 +1,138 @@
+﻿@model RAB.Models.View.MVGambarGaris
+
+
+@{
+    /*refrensi1: https://www.w3schools.com/graphics/svg_path.asp*/
+    /*refrensi2 https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths*/
+
+    int tambah4Text = 100;
+    tambah4Text = Decimal.ToInt32(tambah4Text * ViewBag.Skala);
+
+    int tinggi = Model.TinggiMax + (2 * tambah4Text);
+    int lebar = Model.LebarMax + (2 * tambah4Text);
+
+    int fontSize = Decimal.ToInt32(20 * ViewBag.Skala);
+    int deEx = Decimal.ToInt32(tambah4Text / 3);
+    int deYe = Decimal.ToInt32(tambah4Text / 12);
+    int deYe4eX1 = Decimal.ToInt32(tambah4Text / 2);
+    int deYe4eX = Decimal.ToInt32(tambah4Text / 2);
+}
+
+<svg height="@tinggi" width="@lebar">
+    @foreach (var item in Model.LstGrsKoord)
+    {
+        var X1 = Decimal.ToInt32(@item.Garis.Awal.TitikX.PosRel * @ViewBag.Skala);
+        var Y1 = Decimal.ToInt32(@item.Garis.Awal.TitikY.PosRel * @ViewBag.Skala);
+        var X2 = Decimal.ToInt32(@item.Garis.Akhir.TitikX.PosRel * @ViewBag.Skala);
+        var Y2 = Decimal.ToInt32(@item.Garis.Akhir.TitikY.PosRel * @ViewBag.Skala);
+        @*<i class="btn btn-info">@item.Nama </i>
+            <i class="btn btn-info">X2: @X2</i>
+            <i class="btn btn-info"> Y2: @Y2</i>*@
+
+
+        @if (item.Garis.Arah == RAB.Asset.Enum.ESumbu.X)
+        {
+            X1 = X1 + tambah4Text;
+            X2 = X2 + tambah4Text;
+            Y1 = Y1 + (2 * tambah4Text);
+            <line x1="@X1"
+                  y1="@Y1"
+                  x2="@X2"
+                  y2="@Y2"
+                  stroke="green" stroke-width:"1" stroke-dasharray="5,5" />
+            <g font-size="@fontSize" font-family="sans-serif" fill="black" stroke="none"
+               text-anchor="middle">
+                <text x="@X1" y="@Y1" dx="0" dy="-@deYe4eX1">@item.Nama</text>
+                <text x="@X2" y="@Y2" dx="0" dy="@deYe4eX">@item.Nama</text>
+            </g>
+
+        }
+        else
+        {
+            X2 = X2 + (2 * tambah4Text);
+            Y1 = Y1 + tambah4Text;
+            Y2 = Y2 + tambah4Text;
+
+            <line x1="@X1"
+                  y1="@Y1"
+                  x2="@X2"
+                  y2="@Y2"
+                  stroke="yellow" stroke-width:"1" stroke-dasharray="5,5" />
+
+            <g font-size="@fontSize" font-family="sans-serif" fill="black" stroke="none"
+               text-anchor="middle">
+                <text x="@X1" y="@Y1" dx="@deEx" dy="@deYe">@item.Nama</text>
+                <text x="@X2" y="@Y2" dx="-@deEx" dy="@deYe">@item.Nama</text>
+            </g>
+        }
+    }
+
+
+    @foreach (var item in Model.LstGarisReal)
+    {
+        var X1 = Decimal.ToInt32(@item.Awal.TitikX.PosRel * @ViewBag.Skala) + tambah4Text;
+        var Y1 = Decimal.ToInt32(@item.Awal.TitikY.PosRel * @ViewBag.Skala) + tambah4Text;
+        var X2 = Decimal.ToInt32(@item.Akhir.TitikX.PosRel * @ViewBag.Skala) + tambah4Text;
+        var Y2 = Decimal.ToInt32(@item.Akhir.TitikY.PosRel * @ViewBag.Skala) + tambah4Text;
+
+        <line x1="@X1"
+              y1="@Y1"
+              x2="@X2"
+              y2="@Y2"
+              style="stroke: rgb(13, 8, 247);stroke-width:4"
+              data-toggle="tooltip" title="garis @item.Nama" />
+
+        <a onclick="tampilDiPopUp('@Url.Action("Edit","Koordinat",new { id=item.Awal.KoordId,polaId = Model.PolaId, dariGambar = true, skala = Model.SkalaBulat}
+                            ,Context.Request.Scheme)', 'Rubah Titik Potong')"
+           class="btn btn-sm btn-outline-primary">
+            @*<i class="fa fa-marker fa-sm"> Edit</i>*@
+            <circle id="@item.Awal.Nama" cx="@X1" cy="@Y1" r="7" stroke="red" fill="red" />
+        </a>
+
+        <a onclick="tampilDiPopUp('@Url.Action("Edit","Koordinat",new { id=item.Akhir.KoordId,polaId = Model.PolaId, dariGambar = true, skala = Model.SkalaBulat}
+                            ,Context.Request.Scheme)', 'Rubah Titik Potong')"
+           class="btn btn-sm btn-outline-primary">
+            <circle id="@item.Akhir.Nama" cx="@X2" cy="@Y2" r="6" stroke="blue" fill="red" />
+        </a>
+    }
+    @foreach (var item in Model.LstKoord)
+    {
+        var X = Decimal.ToInt32(@item.TitikX.PosRel * @ViewBag.Skala) + tambah4Text;
+        var Y = Decimal.ToInt32(@item.TitikY.PosRel * @ViewBag.Skala) + tambah4Text;
+
+        <a onclick="tampilDiPopUp('@Url.Action("Edit","Koordinat",new { id=item.KoordId,polaId = Model.PolaId, dariGambar = true, skala = Model.SkalaBulat}
+                            ,Context.Request.Scheme)', 'Rubah Titik Potong')"
+           class="btn btn-sm btn-outline-primary">
+            <circle id="@item.Nama" cx="@X" cy="@Y" r="4" stroke="black" fill="grey" />
+        </a>
+
+    }
+
+    <!--<path id="lineAB" d="M 100 350 l 150 -300" stroke="red"
+          stroke-width="3" fill="none" />
+    <path id="lineBC" d="M 250 50 l 150 300" stroke="red"
+          stroke-width="3" fill="none" />
+    <path d="M 175 200 l 150 0" stroke="green" stroke-width="3"
+          fill="none" />
+    <path d="M 100 350 q 150 -300 300 0" stroke="blue"
+          stroke-width="5" fill="none" />-->
+    <!-- Mark relevant points -->
+    <!--<g stroke="black" stroke-width="3" fill="black">
+        <circle id="pointA" cx="100" cy="350" r="3" />
+        <circle id="pointB" cx="250" cy="50" r="3" />
+        <circle id="pointC" cx="400" cy="350" r="3" />
+    </g>-->
+    <!-- Label the points -->
+    <!--<g font-size="30" font-family="sans-serif" fill="black" stroke="none"
+       text-anchor="middle">
+        <text x="100" y="350" dx="-30">A</text>
+        <text x="250" y="50" dy="-10">B</text>
+        <text x="400" y="350" dx="30">C</text>
+    </g>-->
+</svg>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

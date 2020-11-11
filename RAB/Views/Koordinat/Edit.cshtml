@@ -1,0 +1,105 @@
+﻿@model RAB.Asset.Obyek.OKoordTambahan
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = null;
+}
+<h1 class="text-center">@Model.PubNama</h1>
+<hr/>
+<div class="">
+    <div class="col-md-12">
+        <form asp-action="Edit" asp-route-id="@Model.KoordId" onsubmit="return jQueryAjaxPostSimple(this);" autocomplete="off">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IsiPolaId" />
+            <input type="hidden" asp-for="KoordId" />
+            <input type="hidden" asp-for="Xid" />
+            <input type="hidden" asp-for="Yid" />
+            <input type="hidden" asp-for="PermintaanDariGambar" />
+            <input type="hidden" asp-for="Skala" />
+
+            <div class="form-inline alert-primary">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="TidakKeX" /> @Html.DisplayNameFor(model => model.TidakKeX)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="TidakKeY" /> @Html.DisplayNameFor(model => model.TidakKeY)
+                        </label>
+                    </div>
+                </div>
+             </div>
+             <div class="form-inline alert-primary">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="SbgAwalX" /> @Html.DisplayNameFor(model => model.SbgAwalX)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="SbgAwalY" /> @Html.DisplayNameFor(model => model.SbgAwalY)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="SbgAkhirX" /> @Html.DisplayNameFor(model => model.SbgAkhirX)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="SbgAkhirY" /> @Html.DisplayNameFor(model => model.SbgAkhirY)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-inline alert-warning">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="MiringAtas" /> @Html.DisplayNameFor(model => model.MiringAtas)
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="MiringBawah" /> @Html.DisplayNameFor(model => model.MiringBawah)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="LengkungAtas" /> @Html.DisplayNameFor(model => model.LengkungAtas)
+                            </label>
+                        </div>
+                        <div class="form-groupe">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="LengkungBawah" /> @Html.DisplayNameFor(model => model.LengkungBawah)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="form-group alert alert-secondary">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="KiriBawahSemu" /> @Html.DisplayNameFor(model => model.KiriBawahSemu)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Kirim" class="btn btn-primary col-md-12" />
+                </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

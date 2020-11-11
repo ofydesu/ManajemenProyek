@@ -1,0 +1,89 @@
+﻿@model RAB.Models.Utama.KomponenGaris
+@using RAB.Asset.Enum;
+
+    @{
+        ViewData["Title"] = "Edit";
+        Layout = null;
+    }
+<h4 class="text-center">Untuk Garis @ViewBag.GarisNama </h4>
+    <div class="row">
+        <div class="col-md-12">
+            <form asp-action="AddOrEdit" asp-route-id="@Model.KompGrsId" onsubmit="return jQueryAjaxPostSimple(this);" autocomplete="off">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="KompGrsId" />
+                <input type="hidden" asp-for="GarisId"  />
+
+
+                <div class="form-group">
+                    <label asp-for="KompId" class="control-label"></label>
+                    <select asp-for="KompId" class="form-control" asp-items="ViewBag.KompId"></select>
+                    <span asp-validation-for="KompId" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="PosRelatifDiZ" class="control-label"></label>
+                            <div class="input-group input-group-sm">
+                                <span class="btn-light text-primary input-group-prepend">sisi-- </span>
+                                <select asp-for="PosRelatifDiZ" class="form-control" asp-items="Html.GetEnumSelectList<EPosKompDiZ>()">
+                                </select>
+                                <span class="btn-light text-primary input-group-append">--di</span>
+                            </div>
+                            <span asp-validation-for="PosRelatifDiZ" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label asp-for="PosZId" class="control-label"></label>
+                            <select asp-for="PosZId" class="form-control" asp-items="ViewBag.PosZId"></select>
+                            <span asp-validation-for="PosZId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="PosRelatif" class="control-label"></label>
+                            <select asp-for="PosRelatif" class="form-control" asp-items="Html.GetEnumSelectList<EPosKompDiGaris>()">
+                            </select>
+                            <span asp-validation-for="PosRelatif" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PosRelX" class="control-label"></label>
+                            <input asp-for="PosRelX" class="form-control" />
+                            <span asp-validation-for="PosRelX" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="PosRelY" class="control-label"></label>
+                            <input asp-for="PosRelY" class="form-control" />
+                            <span asp-validation-for="PosRelY" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="OffsetKeKanan" class="control-label"></label>
+                    <input asp-for="OffsetKeKanan" class="form-control" />
+                    <span class="text-info">nol atau tidak berisi, berarti sepanjang garis</span>
+                    <span asp-validation-for="OffsetKeKanan" class="text-danger"></span>
+                </div>
+
+                <div class="form-group ">
+                    <input type="submit" value="Kirim" class="btn btn-primary col-md-12" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

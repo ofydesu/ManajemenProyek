@@ -1,0 +1,103 @@
+﻿@model RAB.Models.View.MVGambarGarisParsial
+
+
+@{
+    /*refrensi1: https://www.w3schools.com/graphics/svg_path.asp*/
+    /*refrensi2 https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths*/
+
+    int tambah4Text = 100;
+    tambah4Text = Decimal.ToInt32(tambah4Text * ViewBag.Skala);
+
+    int tinggi = Model.TinggiMax + (2 * tambah4Text);
+    int lebar = Model.LebarMax + (2 * tambah4Text);
+
+    int fontSize = Decimal.ToInt32(20 * ViewBag.Skala);
+    int deEx = Decimal.ToInt32(tambah4Text * 1.8M);
+    int deYe = Decimal.ToInt32(tambah4Text / 3);
+    int deYe4eX1 = Decimal.ToInt32(tambah4Text / 2);
+    int deYe4eX = Decimal.ToInt32(tambah4Text / 2);
+
+    int Xacuan = 0;
+    int Yacuan = 0;
+    int pjgGaris = Decimal.ToInt32(Model.GarisReal.Panjang * ViewBag.Skala);
+    int geserYkeX = 2 * tambah4Text;
+    int pjgX = pjgGaris + geserYkeX + tambah4Text;
+    int lbrSvg = pjgX + (2 * tambah4Text);
+}
+
+<div class="input-group input-group-lg">
+        <div class="alert-primary text-center input-group-prepend">
+            <span>  Garis @Model.GarisReal.Nama @Model.GarisReal.Panjang @Model.GarisReal.Satuan  </span>
+        </div>
+        <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","KomponenGaris",new { id=Model.GarisReal.GarisId, add= true},Context.Request.Scheme)','Komponen Baru')"
+           class="btn btn-outline-success btn-sm input-group-append" id="btnAdd">
+            <i class="far fa-plus-square"> Tambah Komponen Garis</i>
+        </a>
+</div>
+    <div>
+        <svg height="@tinggi" width="@lbrSvg">
+            @foreach (var item in Model.LstGrsKoord)
+            {
+                var X1 = Decimal.ToInt32(@item.Garis.Awal.TitikX.PosRel * ViewBag.Skala);
+                var Y1 = Decimal.ToInt32(@item.Garis.Awal.TitikY.PosRel * ViewBag.Skala);
+                var X2 = Decimal.ToInt32(@item.Garis.Akhir.TitikX.PosRel * ViewBag.Skala);
+                var Y2 = Decimal.ToInt32(@item.Garis.Akhir.TitikY.PosRel * ViewBag.Skala);
+
+                @if (item.Garis.Arah == RAB.Asset.Enum.ESumbu.X)
+                {
+                    //X1 = X1 + tambah4Text;
+                    X2 = pjgX;   //X2 + (2 * tambah4Text);
+                    Y1 = Y1 + (1 * tambah4Text);
+                    Y2 = Y2 + (1 * tambah4Text);
+                    int lbr = 1;
+                    string warna = "green";
+
+                    @if (@item.Garis.Akhir.TitikY.Jarak == 0)
+                    {
+                        lbr = 2;
+                        warna = "red";
+                        int geser = 2 * tambah4Text;
+
+                        Yacuan = Y1;
+
+                        <path id="sumY" d="M @X1 @Y1 h @geser l @geser -@geser" stroke="red"
+                              stroke-width="1" stroke-dasharray="5,5" fill="none" />
+                    }
+                    <path d="M @X1 @Y1 h @pjgX " stroke="@warna"
+                          stroke-width="@lbr" stroke-dasharray="5,5" fill="none" />
+
+                    <g font-size="@fontSize" font-family="sans-serif" fill="black" stroke="none"
+                       text-anchor="middle">
+                        <text x="@X1" y="@Y1" dx="@deEx" dy="0" style="text-anchor: end">@item.Nama</text>
+
+                        <text x="@X2" y="@Y2" dx="0" dy="0" style="text-anchor: start">@item.Garis.Awal.TitikY.Jarak @item.Garis.Awal.TitikY.Pola.SatuanPenyusun</text>
+                    </g>
+
+                }
+                else
+                {
+                    X1 = geserYkeX;
+                    Y2 = Y2 + (2 * tambah4Text);
+                    Xacuan = X1;
+
+                    <line x1="@X1" y1="@Y1" x2="@X1" y2="@Y2"
+                          stroke="red" stroke-width="2" stroke-dasharray="5,5" />
+
+                    <g font-size="@fontSize" font-family="sans-serif" fill="black" stroke="none"
+                       text-anchor="middle">
+                        <text x="@X1" y="@Y1" dx="0" dy="@deYe">@item.Nama</text>
+                        <text x="@X1" y="@Y2" dx="0" dy="-@deYe">@item.Nama</text>
+                    </g>
+                }
+            }
+
+
+            @{
+                //var pjg = Model.GarisReal.Panjang;
+                <path id="garisAcuan" d="M @Xacuan @Yacuan l @pjgGaris 0" stroke="blue"
+                      stroke-width="2" fill="none" />
+            }
+
+
+        </svg>
+    </div>

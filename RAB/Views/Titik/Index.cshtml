@@ -1,0 +1,68 @@
+﻿@model IEnumerable<RAB.Models.Utama.Titik>
+
+@{
+    ViewData["Title"] = "Titik";
+
+}
+
+<div>
+    <div class="col-mb-3">
+        <form method="get" action="/Titik/Index"
+              data-ajax="true" data-target="#tblTampil" id="frmAjax">
+
+            <div class="input-group input-group-lg">
+                <div class="btn btn-primary input-group-prepend">
+                    <a class="text-dark" href="@Url.Action("Index","Pola",new {id = "" })" id="btnLink">Pola</a>
+                </div>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">DAFTAR GRID PADA </span>
+                </div>
+                <select name="id" id="pilihPola" class="form-control" asp-items="ViewBag.ListPola">
+                    <option selected="selected" value="">Pilih Pola ...</option>
+                </select>
+
+                <div class="btn btn-primary input-group-append">
+                    <a class="text-dark" href="@Url.Action("Index","Gambar",new {id = "" })" id="btnLink">Lihat Gambar</a>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<div id="tblTampil">
+    <partial name="RAB/_TblTitik" model="Model" />
+</div>
+
+    @section Scripts
+{
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var ajaxFormSubmit = function () {
+                    var $form = $(this);
+                    var option = {
+                        url: $form.attr("action"),
+                        type: $form.attr("method"),
+                        data: $form.serialize()
+                    };
+                    $.ajax(option).done(function (data) {
+                        var $target = $("#tblTampil");
+                        $target.html(data);  //.replaceWith(data);
+                    });
+
+                    return false;
+                };
+                var submitForm = function (event, ui) {
+                    var $input = $(this);
+                    var $form = $input.parents("form:first");
+                    var haref = $("#btnLink").attr("href") + "/Index?id=" + $input.val();
+                    $("#btnLink").attr("href", haref);
+                    $form.submit();
+                };
+                $("form[data-ajax='true']").submit(ajaxFormSubmit);
+                $("#pilihPola").change(submitForm);
+
+            });
+        </script>
+    }

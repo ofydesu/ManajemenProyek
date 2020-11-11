@@ -1,0 +1,64 @@
+﻿@model IEnumerable<RAB.Models.Utama.Pola>
+
+<div>
+    <table class="table table-hover">   @*table-striped table-condensed table-responsive">*@
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nama)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SatuanPenyusun)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Posisi3D)
+                </th>
+                <th>
+                    <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","Pola",null,Context.Request.Scheme)','Pola Baru')"
+                       class="btn btn-outline-success" id="btnAdd">
+                        <i class="far fa-plus-square"> Tambah Pola</i>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int No = 1;
+            }
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>@No</td>
+                <td>
+                    <a class="text-dark" href="@Url.Action("Index","Titik",new {id = item.PolaId })" id="btnLink">
+                        @Html.DisplayFor(modelItem => item.Nama)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SatuanPenyusun)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Posisi3D)
+                </td>
+                <td>
+                    <a onclick="tampilDiPopUp('@Url.Action("AddOrEdit","Pola",new { id=item.PolaId,add= false},Context.Request.Scheme)','Rubah Pola')"
+                       class="btn btn-sm btn-outline-primary">
+                        <i class="fa fa-marker fa-sm"> Edit</i>
+                    </a>
+                    <form asp-action="Delete" asp-route-id="@item.PolaId" onsubmit="return jQueryAjaxDelete(this)" class=" d-inline">
+                        <input type="submit" value="Hapus" class="btn btn-sm btn-danger" />
+                    </form>
+                </td>
+            </tr>
+                No++;
+            }
+        </tbody>
+    </table>
+</div>
