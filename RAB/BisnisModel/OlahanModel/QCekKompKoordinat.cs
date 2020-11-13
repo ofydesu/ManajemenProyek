@@ -3,6 +3,7 @@ using RAB.Asset.Obyek;
 using RAB.Asset.OlahanModel;
 using RAB.Data;
 using RAB.Models.Utama;
+using System.Collections.Generic;
 //using System;
 //using System.Collections.Generic;
 using System.Linq;
@@ -29,19 +30,38 @@ namespace RAB.BisnisModel.OlahanModel
 								.Include(k => k.Koordinat.TitikX)
 								.Include(k => k.Koordinat.TitikY)
 							.Include(k=>k.PolaKomponen)
-							.Where(k=>k.PolaKomponen.PolaId == _polaId)
+							//.Where(k=>k.PolaKomponen.PolaId == _polaId)
 							;
 				return qIni;
 			}
 		}
-
+		public KomponenKoordinat QryKoordIni (int koorId)
+		{
+			// temukan apakah ada komponen di koordinat ini
+			// ada potensi kordinat ini tidak punya komponen
+			KomponenKoordinat kompIni = new KomponenKoordinat();
+            try
+            {
+				kompIni = QryTblIni.Where(k => k.KoorId == koorId).First();
+            }
+            catch { }
+			return kompIni;
+		}
 		public IQueryable<OGaris> QryGarisPola(int koorId)
 		{
-			var kompIni = QryTblIni.Where(k => k.KoorId == koorId).First();
-			QCekBidangDatar qDatar = new QCekBidangDatar(_context, kompIni.PolaKomponen.Komponen.PolaId);
-			var qGaris = qDatar.QryGarisPartial.OrderBy(g => g.Arah);
+			// temukan apakah ada komponen di koordinat ini
+			var kompIni = QryKoordIni(koorId);
 
-			return qGaris.AsQueryable();
+			// temukan list garis yang ada di komponen terpilih
+			// polaId utk komponen diambil dari tabel komponePola
+			// ada potensi koordinat ini tdk punya komponen
+			if(kompIni.PolaKomponen != null)
+			{
+				QCekBidangDatar qDatar = new QCekBidangDatar(_context, (int)kompIni.PolaKomponen.KompId);
+				return qDatar.QryGarisPartial.OrderBy(g => g.Arah).AsQueryable();
+            }
+			//kemballikan list garis pola yang ada
+			return new List<OGaris>().AsQueryable();
 		}
 	}
 }

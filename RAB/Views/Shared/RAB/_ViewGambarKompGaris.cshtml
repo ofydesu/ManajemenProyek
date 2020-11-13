@@ -35,20 +35,42 @@ int deYe4eX = Decimal.ToInt32(tambah4Text / 2);
         tolTip += " p:" + item.Panjang + " " + item.Satuan;
 
         string warna = "blue";
-        @if(item.GarisId == ViewBag.GarisTerpilih)
+        @if (item.GarisId == ViewBag.GarisTerpilih)
         {
             warna = "red";
         }
 
-    <a onclick="sesuaikanTampilanGaris('@Url.Action("KompGaris","Gambar",new {polaId= @Model.PolaId,garisId= @item.GarisId},Context.Request.Scheme)')">
+        <a onclick="sesuaikanTampilanGaris('@Url.Action("KompGaris","Gambar",new {polaId= @Model.PolaId,garisId= @item.GarisId},Context.Request.Scheme)')">
 
-        <line x1="@X1" y1="@Y1" x2="@X2" y2="@Y2"
-              stroke="@warna" stroke-width="3"
-              data-toggle="tooltip" title="garis @tolTip" class="pilihGaris" />
+            <line x1="@X1" y1="@Y1" x2="@X2" y2="@Y2"
+                  stroke="@warna" stroke-width="3"
+                  data-toggle="tooltip" title="garis @tolTip" class="pilihGaris" />
+        </a>
+    }
 
-    </a>
-            <circle id="@item.KoordAwal.Nama" cx="@X1" cy="@Y1" r="4" stroke="blue" fill="red" />
-            <circle id="@item.KoordAkhir.Nama" cx="@X2" cy="@Y2" r="4" stroke="blue" fill="red" />
-            }
+    @foreach (var item in Model.LstKoord)
+    {
+        var X = Decimal.ToInt32(@item.TitikX.PosRel * skalaInzet) + tambah4Text;
+        var Y = Decimal.ToInt32(@item.TitikY.PosRel * skalaInzet) + tambah4Text;
 
-    </svg>
+        string warna = "grey";
+        @if (item.KoordId == ViewBag.KoordTerpilih)
+        {
+            warna = "red";
+        }
+
+        <g font-size="20" font-family="sans-serif" fill="Yellow" stroke="none"
+           text-anchor="middle">
+            <text x="@X" y="@Y" dx="0" dy="0">@item.Nama</text>
+        </g>
+
+        <a onclick="sesuaikanTampilanKoord('@Url.Action("Index","KomponenKoordinat",new {koorId= item.KoordId},Context.Request.Scheme)',
+                                            '@Url.Action("KompGaris","Gambar",new {polaId= @Model.PolaId,koorId= @item.KoordId},Context.Request.Scheme)')">
+            <circle id="@item.Nama" cx="@X" cy="@Y" r="6" stroke="blue" fill="@warna" />
+        </a>
+
+
+    }
+
+
+</svg>

@@ -57,6 +57,7 @@ namespace RAB.Models.View
         public IEnumerable<OKetGarisKoordinat> LstGrsKoord { get; set; }
         public Garis GarisReal { get; set; }
         public Garis GarisSemu { get; set; }
+        public List<AGaris> LstGarisKomp { get; set; }
         public int TinggiMax { get; set; }
         public int LebarMax { get; set; }
         public decimal Skala { get; set; }

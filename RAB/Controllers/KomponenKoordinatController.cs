@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using RAB.Asset.Enum;
 using RAB.BisnisModel.Sesi;
 using RAB.Data;
@@ -41,36 +42,48 @@ namespace RAB.Controllers
         {
             #region simpan/ambil kode ke/dari sesi
             var sesPola = SPola.GetSesi(this);
-            if (dariForm)
-            {
-                sesPola.SetPolaId(polaId);
-                sesPola.SetKoorId(koorId);
-            }
-            else if(dariAjax)
+            if(dariAjax)
             {
                 polaId = sesPola.PolaId;
                 koorId = sesPola.KoorId;
             }
             #endregion
             #region tblKomponenKoordinat
-            var rabContext = _context.TblKomponenKoordinat
-                                .Include(k => k.Koordinat)
-                                    .Include(k => k.Koordinat.TitikX)
-                                    .Include(k => k.Koordinat.TitikY)
-                                .Include(k => k.PolaKomponen)
-                                    .Include(k => k.PolaKomponen.Komponen)
-                                .Include(k => k.TitikZatas)
-                                .Include(k => k.TitikZbawah)
-                                .Where(k=>k.PolaKomponen.PolaId == polaId)
-                                .ToList()
-                                ;
+            var rabContext = _context.TblKomponenKoordinat.AsQueryable();
+
+            if (polaId != null) { 
+                rabContext = rabContext.Where(k => k.PolaKomponen.PolaId == polaId);
+                sesPola.SetPolaId(polaId);
+            }
             #endregion
 
             if (koorId != null && koorId != 0)
             {
-                rabContext = rabContext.Where(k=>k.KoorId == koorId).ToList();
+                rabContext = rabContext.Where(k=>k.KoorId == koorId);
+                sesPola.SetKoorId(koorId);
             }
 
+            //rabContext = rabContext.Include(k => k.Koordinat);
+
+
+            if (polaId == null && koorId == null) {
+                rabContext = rabContext.Where(k => k.KoorId == 0);
+            }
+            else
+            {
+                rabContext = rabContext
+                                    .Include(k => k.Koordinat)
+                                        .Include(k => k.Koordinat.TitikX)
+                                        .Include(k => k.Koordinat.TitikY)
+                                    .Include(k => k.PolaKomponen)
+                                        .Include(k => k.PolaKomponen.Komponen)
+                                    .Include(k => k.TitikZatas)
+                                    .Include(k => k.TitikZbawah)
+                                    ;
+                //simpan polaId dan koorId di sessi
+            }
+
+            ViewBag.KoorId = koorId;
             bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
             if (isAjax)
             {

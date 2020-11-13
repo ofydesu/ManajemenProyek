@@ -93,9 +93,25 @@
 
 
             @{
-                //var pjg = Model.GarisReal.Panjang;
-                <path id="garisAcuan" d="M @Xacuan @Yacuan l @pjgGaris 0" stroke="blue"
-                      stroke-width="2" fill="none" />
+                //garis acuan yang akan diatur komponennya;
+                <path id="garisAcuan" d="M @Xacuan @Yacuan l @pjgGaris 0" stroke="Yellow"
+                      stroke-width="4" fill="none" />
+            }
+
+            @foreach (var item in Model.LstGarisKomp)
+            {
+                // garis komponen
+                var X1 = Decimal.ToInt32(@item.KoorAwal.PosX * ViewBag.Skala);
+                var Y1 = Decimal.ToInt32(@item.KoorAwal.PosY * ViewBag.Skala);
+                var X2 = Decimal.ToInt32(@item.KoorAkhir.PosX * ViewBag.Skala);
+                var Y2 = Decimal.ToInt32(@item.KoorAkhir.PosY * ViewBag.Skala);
+
+                X1 = X1 + geserYkeX;
+                X2 = X2 + geserYkeX;
+                Y1 = Y1 + tambah4Text;
+                Y2 = Y2 + tambah4Text;
+
+                <line x1="@X1" y1="@Y1" x2="@X2" y2="@Y2" stroke="blue" stroke-width="1" />
             }
 
 

@@ -198,3 +198,46 @@ tandaiGarisTerpilih = (url) => {
     }
     return false;
 }
+sesuaikanTampilanKoord = (url,urlInzet) => {
+    try {
+        $.ajax({
+            type: "get",
+            url: url,
+            //data: new{polaId:polId, garisId:grsId, skl:skla},
+            contentType: false,
+            processData: false,
+            success: function (resp) {
+                $("#tblTampil").html(resp);
+                // rubah tampilan inzet
+                tandaiKoordTerpilih(urlInzet);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    } catch (e) {
+        console.log(e);
+    }
+    return false;
+}
+tandaiKoordTerpilih = (url) => {
+    try {
+        var urlIni = url + "&inzet=true";
+        $.ajax({
+            type: "get",
+            url: urlIni,
+            contentType: false,
+            processData: false,
+            success: function (resp) {
+                $("#tblInzet").html(resp);
+                //alert(urlIni);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    } catch (e) {
+        console.log(e);
+    }
+    return false;
+}

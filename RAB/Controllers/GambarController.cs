@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using RAB.Asset.Enum;
 using RAB.Asset.Obyek;
 using RAB.Asset.OlahanModel;
+using RAB.BisnisModel.OlahanModel;
 using RAB.BisnisModel.Sesi;
 using RAB.Data;
 using RAB.Models.Utama;
@@ -144,7 +145,7 @@ namespace RAB.Controllers
             return View(MVGambarGaris);
         }
 
-        public IActionResult KompGaris(int? polaId, int? garisId, int? skl, bool inzet = false)
+        public IActionResult KompGaris(int? polaId, int? garisId, int? koorId, int? skl, bool inzet = false)
         {
             var sesPola = SPola.GetSesi(this);
             int _polaId = 0;
@@ -214,7 +215,11 @@ namespace RAB.Controllers
                     QCekKoordinat qKoor = new QCekKoordinat(_context, _polaId);
                     qGrsKoor = qKoor.GarisKoordinat;
                     qTtkKoor = qKoor.QryTblIniPosUpToDate;
-
+                    // filter titik koordinat yang ada garis saja--------------------
+                    var lstKoorAwalGrs = qGaris.Select(g => g.KoordAwal.KoordId).ToList();
+                    var lstKoorAkhirGrs = qGaris.Select(g => g.KoordAkhir.KoordId).ToList();
+                    qTtkKoor = qTtkKoor.Where(t => lstKoorAwalGrs.Contains(t.KoordId) || lstKoorAkhirGrs.Contains(t.KoordId));
+                    //---------------------------------------------------------------------------------------------------------
                     mvGambarGarisValid.TinggiMax = qGrsKoor.Where(g => g.Garis.Arah == ESumbu.Y)
                                 .Select(s => s.Garis.Akhir.TitikY.PosAbs).Max() + 300;
                     mvGambarGarisValid.LebarMax = qGrsKoor.Where(g => g.Garis.Arah == ESumbu.X)
@@ -241,27 +246,27 @@ namespace RAB.Controllers
 
                     mvGambarGarisParsial.TinggiMax = qGrsKoor.Where(g => g.Garis.Arah == ESumbu.Y)
                                 .Select(s => s.Garis.Akhir.TitikY.PosRel).Max() + 300;
-
-                    //mvGambarGarisParsial.LebarMax = qGrsKoor.Where(g => g.Garis.Arah == ESumbu.X)
-                    //            .Select(s => s.Garis.Akhir.TitikY.PosAbs).Max() + 500;
-                    //buat garis koordinat
-
                 }
                 catch (Exception) { }
                 if (garisId != 0)
                 {
+                    QCekKompGaris qcKGaris = new QCekKompGaris(_context, _polaId, (int) garisId);
                     mvGambarGarisParsial.GarisReal = garis;
+                    mvGambarGarisParsial.LstGarisKomp = qcKGaris.GarisKomponen.ToList();
                 }
                 mvGambarGarisParsial.LstGrsKoord = qGrsKoor.ToList();
                 mvGambarGarisParsial.LstKoord = qTtkKoor.ToList();
 
                 #endregion
+
+
                 mvKompGaris.GarisValid = mvGambarGarisValid;
                 mvKompGaris.GarisParsial = mvGambarGarisParsial;
             }
 
             ViewBag.Skala = skala / 100;
             ViewBag.GarisTerpilih = garisId;
+            ViewBag.KoordTerpilih = koorId;
             bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
             if (isAjax)
             {
@@ -279,6 +284,15 @@ namespace RAB.Controllers
             ViewBag.ListSkala = new SelectList(LstSkala, "Nilai", "Nama", skala);
 
             return View(mvKompGaris);
+        }
+
+        public IActionResult KompKoord(int koorId)
+        {
+            var modelAjax = _context.TblKomponenKoordinat
+                                //.Where(k => k.KoorId == kompKoorId)
+                                    ;
+            var hasil =  Json(new { html = Helper.RenderRazorViewToString(this, "RAB/_TblKomponenKoordinat", modelAjax.ToList())});
+            return hasil;
         }
 
     }
