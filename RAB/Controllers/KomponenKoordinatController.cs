@@ -131,7 +131,7 @@ namespace RAB.Controllers
 
             ViewBag.KoorNama = koor.Nama;
             var lstKomp4Select = _context.TblKomponenPola.Where(k => k.PolaId == polaId && (int) k.Komponen.Posisi3D == (int) EPosisi3D.Kolom)
-                                .Select(k => new { k.KomPolId, k.Komponen.Nama }).ToList();
+                                .Select(k => new { k.KomPolaId, k.Komponen.Nama }).ToList();
             var lstPosZ = _context.TblTitik.Where(t => t.PolaId == polaId && t.Sumbu == ESumbu.Z)
                             .OrderByDescending(t=>t.Jarak)
                             .Select(t => new { t.TtkId, t.Nama }).ToList();
@@ -200,7 +200,7 @@ namespace RAB.Controllers
 
             ViewBag.KoorNama = koor.Nama;
             var lstKomp4Select = _context.TblKomponenPola.Where(k => k.PolaId == polaId && (int)k.Komponen.Posisi3D == (int)EPosisi3D.Kolom)
-                                .Select(k => new { k.KomPolId, k.Komponen.Nama }).ToList();
+                                .Select(k => new { k.KomPolaId, k.Komponen.Nama }).ToList();
             var lstPosZ = _context.TblTitik.Where(t => t.PolaId == polaId && t.Sumbu == ESumbu.Z)
                             .OrderByDescending(t => t.Jarak)
                             .Select(t => new { t.TtkId, t.Nama }).ToList();

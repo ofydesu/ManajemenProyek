@@ -12,16 +12,16 @@ namespace RAB.Models.Utama
         public int KompGrsId { get; set; }
         public int GarisId { get; set; }
         [DisplayName("Komponen")]
-        public int KompId { get; set; }
+        public int KompPolaId { get; set; }
         [DisplayName("Posisi Relatif Thd Z")]
         public EPosKompDiZ PosRelatifDiZ { get; set; } = EPosKompDiZ.Bawah;
         [DisplayName("Posisi Sumbu Z (vertikal)")]
         public int PosZId { get; set; }
-        [DisplayName("Posisi Relatif Thd Awal Garis")]
+        [DisplayName("Posisi Thd Garis")]
         public EPosKompDiGaris PosRelatif { get; set; } = EPosKompDiGaris.Kiri;
-        [DisplayName("Posisi Relatif X Pilihan")]
+        [DisplayName("Offset X")]
         public int PosRelX { get; set; }
-        [DisplayName("Posisi Relatif Y Pilihan")]
+        [DisplayName("Offset Y")]
         public int PosRelY { get; set; }
 
         [DisplayName("Offset Ke Kanan")]

@@ -72,18 +72,14 @@ namespace RAB.Controllers
                 return lstSkala;
             }
         }
-        public IActionResult Index(int? id, int skl = 100)
+        public IActionResult Index(int? id, int skl = 50, bool dariForm= false)
         {
             var sesPola = SPola.GetSesi(this);
-            if (id != null)
+            if (dariForm)
                 sesPola.SetPolaId(id);
             else
                 id = sesPola.PolaId;
 
-            //if (!isAjax)
-            //{
-            //    return RedirectToAction(nameof(Index));
-            //}
             decimal skala = (decimal)skl;
             if (skala < 10) { skala = 100; }
             var MVGambarGaris = new MVGambarGaris()
@@ -166,6 +162,7 @@ namespace RAB.Controllers
             else { 
                 garisId = sesPola.GarisId; 
             }
+
             if (skl != null)
             {
                 // simpan ke sessi
@@ -206,6 +203,7 @@ namespace RAB.Controllers
                 try
                 {
                     QCekGaris qcGaris = new QCekGaris(_context, _polaId);
+                    qcGaris.UpdateDariGambar();
                     qGaris = qcGaris.QryTblIniPosUpToDate.OrderBy(g => g.Arah);
 
                     // memperbaharui tabel garis di pola terpilih
@@ -245,7 +243,7 @@ namespace RAB.Controllers
                     qTtkKoor = qKoor.QryTblIni4ZPosUpToDate;
 
                     mvGambarGarisParsial.TinggiMax = qGrsKoor.Where(g => g.Garis.Arah == ESumbu.Y)
-                                .Select(s => s.Garis.Akhir.TitikY.PosRel).Max() + 300;
+                                .Select(s => s.Garis.Akhir.TitikY.PosRel).Max();
                 }
                 catch (Exception) { }
                 if (garisId != 0)
@@ -262,9 +260,24 @@ namespace RAB.Controllers
 
                 mvKompGaris.GarisValid = mvGambarGarisValid;
                 mvKompGaris.GarisParsial = mvGambarGarisParsial;
+                // menambang tabel komponen garis
+                var tblKompGaris = _context.TblKomponenGaris
+                        .Include(k => k.Garis)
+                            .Include(g => g.Garis.KoordAwal)
+                            .Include(g => g.Garis.KoordAkhir)
+                            .Include(g => g.Garis.KoordAwal.TitikX)
+                            .Include(g => g.Garis.KoordAwal.TitikY)
+                            .Include(g => g.Garis.KoordAkhir.TitikX)
+                            .Include(g => g.Garis.KoordAkhir.TitikY)
+                        .Include(k => k.PolaKomponen).ThenInclude(p => p.Komponen)
+                        .Include(k => k.TitikZ)
+                        .Where(k => k.Garis.GarisId == garisId)
+                        ;
+
+                mvKompGaris.GarisParsial.TblKompGaris = tblKompGaris;
             }
 
-            ViewBag.Skala = skala / 100;
+            ViewBag.Skala = skala / 50;
             ViewBag.GarisTerpilih = garisId;
             ViewBag.KoordTerpilih = koorId;
             bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";

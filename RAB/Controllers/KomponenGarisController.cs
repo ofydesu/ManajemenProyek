@@ -141,11 +141,11 @@ namespace RAB.Controllers
 
             ViewBag.GarisNama = grs.Nama + " (" + grs.Arah +")";
             var lstKomp4Select = _context.TblKomponenPola.Where(k => k.PolaId == polaId)
-                                .Select(k => new { k.KomPolId, k.Komponen.Nama }).ToList();
+                                .Select(k => new { k.KomPolaId, k.Komponen.Nama }).ToList();
             var lstPosZ = _context.TblTitik.Where(t => t.PolaId == polaId && t.Sumbu == ESumbu.Z)
                             .Select(t => new { t.TtkId, t.Nama }).ToList();
 
-            ViewData["KompId"] = new SelectList(lstKomp4Select, "KomPolId", "Nama", komponenGaris.KompId);
+            ViewData["KompPolaId"] = new SelectList(lstKomp4Select, "KomPolaId", "Nama", komponenGaris.KompPolaId);
             ViewData["PosZId"] = new SelectList(lstPosZ,"TtkId","Nama",komponenGaris.PosZId);
 
             return View(komponenGaris);
@@ -156,7 +156,7 @@ namespace RAB.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(int id, [Bind("KompGrsId,GarisId,KompId,PosRelatifDiZ,PosZId,PosRelatif,PosRelX,PosRelY,OffsetKeKanan")] KomponenGaris komponenGaris)
+        public async Task<IActionResult> AddOrEdit(int id, [Bind("KompGrsId,GarisId,KompPolaId,PosRelatifDiZ,PosZId,PosRelatif,PosRelX,PosRelY,OffsetKeKanan")] KomponenGaris komponenGaris)
         {
             var sesPola = SPola.GetSesi(this);
             var permintaanDariGambar = sesPola.DariGambar;
@@ -215,11 +215,11 @@ namespace RAB.Controllers
 
             ViewBag.GarisNama = grs.Nama + " (" + grs.Arah + ")";
             var lstKomp4Select = _context.TblKomponenPola.Where(k => k.PolaId == polaId)
-                                .Select(k => new { k.KomPolId, k.Komponen.Nama }).ToList();
+                                .Select(k => new { k.KomPolaId, k.Komponen.Nama }).ToList();
             var lstPosZ = _context.TblTitik.Where(t => t.PolaId == polaId && t.Sumbu == ESumbu.Z)
                             .Select(t => new { t.TtkId, t.Nama }).ToList();
 
-            ViewData["KompId"] = new SelectList(lstKomp4Select, "KomPolId", "Nama", komponenGaris.KompId);
+            ViewData["KompPolaId"] = new SelectList(lstKomp4Select, "KomPolaId", "Nama", komponenGaris.KompPolaId);
             ViewData["PosZId"] = new SelectList(lstPosZ, "TtkId", "Nama", komponenGaris.PosZId);
 
             if (permintaanDariGambar){

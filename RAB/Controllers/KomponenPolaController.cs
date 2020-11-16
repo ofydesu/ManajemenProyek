@@ -75,7 +75,7 @@ namespace RAB.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(int id, [Bind("KomPolId,PolaId,KompId")] KomponenPola komponenPola)
+        public async Task<IActionResult> AddOrEdit(int id, [Bind("KomPolaId,PolaId,KompId")] KomponenPola komponenPola)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace RAB.Controllers
                         ModelState.AddModelError("CustomError", ex.Message);
                     }
                 }
-                else if (id == komponenPola.KomPolId)
+                else if (id == komponenPola.KomPolaId)
                 { 
 
                     try
@@ -101,7 +101,7 @@ namespace RAB.Controllers
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!KomponenPolaExists(komponenPola.KomPolId))
+                        if (!KomponenPolaExists(komponenPola.KomPolaId))
                         {
                             return NotFound();
                         }
@@ -136,7 +136,7 @@ namespace RAB.Controllers
 
         private bool KomponenPolaExists(int id)
         {
-            return _context.TblKomponenPola.Any(e => e.KomPolId == id);
+            return _context.TblKomponenPola.Any(e => e.KomPolaId == id);
         }
     }
 }

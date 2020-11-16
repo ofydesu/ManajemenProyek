@@ -57,7 +57,7 @@ namespace RAB.BisnisModel.OlahanModel
 				//membuat garis di koordinat
 				_garisUpToDate = KomplexGarisUpToDate;
 
-				var koleksi = QryGarisPolaKolom;	//QryGarisPolaBalok;
+				var koleksi = QryGarisPolaKolom.Union(QryGarisPolaBalok);
 				return koleksi;
             }
         }
@@ -125,8 +125,8 @@ namespace RAB.BisnisModel.OlahanModel
 				var kordPolaBalok = polaBalok.Select(b => new AListGarisPola()
 				{
 					GarisId = b.GarisId,
-					KompId = b.KompId,
-					LstGaris = CekListGarisPola(b.KompId)
+					KompId = b.PolaKomponen.Komponen.PolaId,
+					LstGaris = CekListGarisPola(b.PolaKomponen.Komponen.PolaId)
 				});
 
 				var posAtas = polaBalok.Where(k => k.PosRelatifDiZ == EPosKompDiZ.Atas);

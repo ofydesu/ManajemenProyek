@@ -1,6 +1,7 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
+
 // Write your JavaScript code.
 /*
  * sumbangan kode dari Youtube : https://www.youtube.com/watch?v=3r6RfShv8m8 31 Okt 2020 04:07
@@ -140,17 +141,30 @@ jQueryAjaxDelete = form => {
 }
 
 pilihSumbuDiIsianGrid = select => {
-    $.ajax({
-        url: "Titik/MaxSumbu",
-        type: "get",
-        data: { polaId: $("#polaId").val(), eSumId: $("#pilihSumbu").val() },
-        success: function (data) {
-            $("#sumbuId").val(data);
-        },
-        error: function () {
-            $("#sumbuId").val(1);
-        }
-    });
+
+    $.getJSON("Titik/MaxSumbu", {
+        polaId: $("#polaId").val(),
+        eSumId: $("#pilihSumbu").val()
+    })
+        .done(function (data) { $("#sumbuId").val(data);})
+        .fail(function () {$("#sumbuId").val(1);});
+
+//    $.ajax({
+//        url: "Titik/MaxSumbu",
+//        type: "get",
+//        data: {
+//            polaId: $("#polaId").val(),
+//            eSumId: $("#pilihSumbu").val()
+//        },
+//        success: function (data) {
+//            //$("#sumbuId").val(data);
+//            alert("sukses");
+//        },
+//        error: function () {
+//            alert("gagal");
+//            //$("#sumbuId").val(1);
+//        }
+//    });
 }
 //-----------------------------------------------------------------
 sesuaikanTampilanGaris = (url) => {

@@ -256,7 +256,7 @@ namespace RAB.Migrations
                     b.Property<int>("GarisId")
                         .HasColumnType("int");
 
-                    b.Property<int>("KompId")
+                    b.Property<int>("KompPolaId")
                         .HasColumnType("int");
 
                     b.Property<int>("OffsetKeKanan")
@@ -279,11 +279,11 @@ namespace RAB.Migrations
 
                     b.HasKey("KompGrsId");
 
-                    b.HasIndex("KompId");
+                    b.HasIndex("KompPolaId");
 
                     b.HasIndex("PosZId");
 
-                    b.HasIndex("GarisId", "KompId", "PosRelatif", "PosRelX")
+                    b.HasIndex("GarisId", "KompPolaId", "PosRelatif", "PosRelX")
                         .IsUnique();
 
                     b.ToTable("TblKomponenGaris");
@@ -324,7 +324,7 @@ namespace RAB.Migrations
 
             modelBuilder.Entity("RAB.Models.Utama.KomponenPola", b =>
                 {
-                    b.Property<int>("KomPolId")
+                    b.Property<int>("KomPolaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -335,7 +335,7 @@ namespace RAB.Migrations
                     b.Property<int?>("PolaId")
                         .HasColumnType("int");
 
-                    b.HasKey("KomPolId");
+                    b.HasKey("KomPolaId");
 
                     b.HasIndex("KompId");
 
@@ -540,7 +540,7 @@ namespace RAB.Migrations
 
                     b.HasOne("RAB.Models.Utama.KomponenPola", "PolaKomponen")
                         .WithMany("TblKompGaris")
-                        .HasForeignKey("KompId")
+                        .HasForeignKey("KompPolaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

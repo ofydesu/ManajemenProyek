@@ -10,8 +10,8 @@ using RAB.Data;
 namespace RAB.Migrations
 {
     [DbContext(typeof(RabContext))]
-    [Migration("20201107080530_Tambah TblGaris dan KompGaris")]
-    partial class TambahTblGarisdanKompGaris
+    [Migration("20201115131150_Mulai dari Awal sampai TblKompGaris")]
+    partial class MulaidariAwalsampaiTblKompGaris
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -231,6 +231,9 @@ namespace RAB.Migrations
                     b.Property<int?>("AkhirId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Arah")
+                        .HasColumnType("int");
+
                     b.Property<int?>("AwalId")
                         .HasColumnType("int");
 
@@ -255,7 +258,10 @@ namespace RAB.Migrations
                     b.Property<int>("GarisId")
                         .HasColumnType("int");
 
-                    b.Property<int>("KompId")
+                    b.Property<int>("KompPolaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OffsetKeKanan")
                         .HasColumnType("int");
 
                     b.Property<int>("PosRelX")
@@ -267,27 +273,60 @@ namespace RAB.Migrations
                     b.Property<int>("PosRelatif")
                         .HasColumnType("int");
 
-                    b.Property<int>("PosZId")
+                    b.Property<int>("PosRelatifDiZ")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TitikZTtkId")
+                    b.Property<int>("PosZId")
                         .HasColumnType("int");
 
                     b.HasKey("KompGrsId");
 
-                    b.HasIndex("KompId");
+                    b.HasIndex("KompPolaId");
 
-                    b.HasIndex("TitikZTtkId");
+                    b.HasIndex("PosZId");
 
-                    b.HasIndex("GarisId", "KompId")
+                    b.HasIndex("GarisId", "KompPolaId", "PosRelatif", "PosRelX")
                         .IsUnique();
 
                     b.ToTable("TblKomponenGaris");
                 });
 
+            modelBuilder.Entity("RAB.Models.Utama.KomponenKoordinat", b =>
+                {
+                    b.Property<int>("KompKoorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("KompId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KoorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PosAtasId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PosBawahId")
+                        .HasColumnType("int");
+
+                    b.HasKey("KompKoorId");
+
+                    b.HasIndex("KompId");
+
+                    b.HasIndex("KoorId")
+                        .IsUnique();
+
+                    b.HasIndex("PosAtasId");
+
+                    b.HasIndex("PosBawahId");
+
+                    b.ToTable("TblKomponenKoordinat");
+                });
+
             modelBuilder.Entity("RAB.Models.Utama.KomponenPola", b =>
                 {
-                    b.Property<int>("KomPolId")
+                    b.Property<int>("KomPolaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -298,7 +337,7 @@ namespace RAB.Migrations
                     b.Property<int?>("PolaId")
                         .HasColumnType("int");
 
-                    b.HasKey("KomPolId");
+                    b.HasKey("KomPolaId");
 
                     b.HasIndex("KompId");
 
@@ -376,6 +415,9 @@ namespace RAB.Migrations
                     b.Property<string>("Nama")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Posisi3D")
+                        .HasColumnType("int");
 
                     b.Property<int>("SatuanPenyusun")
                         .HasColumnType("int");
@@ -482,11 +524,11 @@ namespace RAB.Migrations
             modelBuilder.Entity("RAB.Models.Utama.Garis", b =>
                 {
                     b.HasOne("RAB.Models.Utama.Koordinat", "KoordAkhir")
-                        .WithMany("TblKoordAkhir")
+                        .WithMany("TblGarisAkhir")
                         .HasForeignKey("AkhirId");
 
                     b.HasOne("RAB.Models.Utama.Koordinat", "KoordAwal")
-                        .WithMany("TblKoordAwal")
+                        .WithMany("TblGarisAwal")
                         .HasForeignKey("AwalId");
                 });
 
@@ -498,15 +540,40 @@ namespace RAB.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RAB.Models.Utama.KomponenPola", "Komponen")
+                    b.HasOne("RAB.Models.Utama.KomponenPola", "PolaKomponen")
                         .WithMany("TblKompGaris")
-                        .HasForeignKey("KompId")
+                        .HasForeignKey("KompPolaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RAB.Models.Utama.Titik", "TitikZ")
-                        .WithMany()
-                        .HasForeignKey("TitikZTtkId");
+                        .WithMany("TblKompGarisZ")
+                        .HasForeignKey("PosZId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RAB.Models.Utama.KomponenKoordinat", b =>
+                {
+                    b.HasOne("RAB.Models.Utama.KomponenPola", "PolaKomponen")
+                        .WithMany("TblKompPolaKoord")
+                        .HasForeignKey("KompId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RAB.Models.Utama.Koordinat", "Koordinat")
+                        .WithMany("TblKompKoor")
+                        .HasForeignKey("KoorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RAB.Models.Utama.Titik", "TitikZatas")
+                        .WithMany("TblKompKoorZatas")
+                        .HasForeignKey("PosAtasId");
+
+                    b.HasOne("RAB.Models.Utama.Titik", "TitikZbawah")
+                        .WithMany("TblKompKoorZbawah")
+                        .HasForeignKey("PosBawahId");
                 });
 
             modelBuilder.Entity("RAB.Models.Utama.KomponenPola", b =>
@@ -533,7 +600,7 @@ namespace RAB.Migrations
 
             modelBuilder.Entity("RAB.Models.Utama.Titik", b =>
                 {
-                    b.HasOne("RAB.Models.Utama.Pola", "TblPola")
+                    b.HasOne("RAB.Models.Utama.Pola", "Pola")
                         .WithMany("TblTitik")
                         .HasForeignKey("PolaId")
                         .OnDelete(DeleteBehavior.Cascade)

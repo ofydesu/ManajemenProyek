@@ -9,7 +9,7 @@ namespace RAB.Models.Utama
 {
     public class KomponenPola
     {
-        public int KomPolId { get; set; }
+        public int KomPolaId { get; set; }
         public int? PolaId { get; set; }
         [DisplayName("Komponen")]
         public int? KompId { get; set; }

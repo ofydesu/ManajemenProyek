@@ -61,6 +61,7 @@ namespace RAB.Models.View
         public int TinggiMax { get; set; }
         public int LebarMax { get; set; }
         public decimal Skala { get; set; }
+        public IEnumerable<KomponenGaris> TblKompGaris { get; set; }
         public int SkalaBulat
         {
             get

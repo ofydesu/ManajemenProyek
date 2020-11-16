@@ -124,7 +124,7 @@ namespace RAB.BisnisModel.Sesi
         {
             if (context.Session.GetString(SesiSkala) == null)
             {
-                return 100;
+                return 25;
             }
             return (int)context.Session.GetInt32(SesiSkala);
         }

@@ -8,8 +8,8 @@
     int tambah4Text = 100;
     tambah4Text = Decimal.ToInt32(tambah4Text * ViewBag.Skala);
 
-    int tinggi = Model.TinggiMax + (2 * tambah4Text);
-    int lebar = Model.LebarMax + (2 * tambah4Text);
+    int tinggi = Decimal.ToInt32((Model.TinggiMax * ViewBag.Skala) + (2 * tambah4Text));
+    int lebar = Decimal.ToInt32((Model.LebarMax * ViewBag.Skala) + (2 * tambah4Text));
 
     int fontSize = Decimal.ToInt32(20 * ViewBag.Skala);
     int deEx = Decimal.ToInt32(tambah4Text / 3);
@@ -25,10 +25,6 @@
         var Y1 = Decimal.ToInt32(@item.Garis.Awal.TitikY.PosRel * @ViewBag.Skala);
         var X2 = Decimal.ToInt32(@item.Garis.Akhir.TitikX.PosRel * @ViewBag.Skala);
         var Y2 = Decimal.ToInt32(@item.Garis.Akhir.TitikY.PosRel * @ViewBag.Skala);
-        @*<i class="btn btn-info">@item.Nama </i>
-            <i class="btn btn-info">X2: @X2</i>
-            <i class="btn btn-info"> Y2: @Y2</i>*@
-
 
         @if (item.Garis.Arah == RAB.Asset.Enum.ESumbu.X)
         {

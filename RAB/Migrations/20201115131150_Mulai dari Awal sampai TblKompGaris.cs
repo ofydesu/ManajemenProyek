@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RAB.Migrations
 {
-    public partial class UbahdariAwal : Migration
+    public partial class MulaidariAwalsampaiTblKompGaris : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,7 +54,8 @@ namespace RAB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nama = table.Column<string>(type: "varchar(100)", nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    SatuanPenyusun = table.Column<int>(nullable: false)
+                    SatuanPenyusun = table.Column<int>(nullable: false),
+                    Posisi3D = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,14 +172,14 @@ namespace RAB.Migrations
                 name: "TblKomponenPola",
                 columns: table => new
                 {
-                    KomPolId = table.Column<int>(nullable: false)
+                    KomPolaId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PolaId = table.Column<int>(nullable: true),
                     KompId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TblKomponenPola", x => x.KomPolId);
+                    table.PrimaryKey("PK_TblKomponenPola", x => x.KomPolaId);
                     table.ForeignKey(
                         name: "FK_TblKomponenPola_TblPola_KompId",
                         column: x => x.KompId,
@@ -255,6 +256,111 @@ namespace RAB.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TblGaris",
+                columns: table => new
+                {
+                    GarisId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AwalId = table.Column<int>(nullable: true),
+                    AkhirId = table.Column<int>(nullable: true),
+                    Arah = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TblGaris", x => x.GarisId);
+                    table.ForeignKey(
+                        name: "FK_TblGaris_TblKoordinat_AkhirId",
+                        column: x => x.AkhirId,
+                        principalTable: "TblKoordinat",
+                        principalColumn: "KoordId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TblGaris_TblKoordinat_AwalId",
+                        column: x => x.AwalId,
+                        principalTable: "TblKoordinat",
+                        principalColumn: "KoordId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TblKomponenKoordinat",
+                columns: table => new
+                {
+                    KompKoorId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    KoorId = table.Column<int>(nullable: false),
+                    KompId = table.Column<int>(nullable: false),
+                    PosAtasId = table.Column<int>(nullable: true),
+                    PosBawahId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TblKomponenKoordinat", x => x.KompKoorId);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenKoordinat_TblKomponenPola_KompId",
+                        column: x => x.KompId,
+                        principalTable: "TblKomponenPola",
+                        principalColumn: "KomPolaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenKoordinat_TblKoordinat_KoorId",
+                        column: x => x.KoorId,
+                        principalTable: "TblKoordinat",
+                        principalColumn: "KoordId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenKoordinat_TblTitik_PosAtasId",
+                        column: x => x.PosAtasId,
+                        principalTable: "TblTitik",
+                        principalColumn: "TtkId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenKoordinat_TblTitik_PosBawahId",
+                        column: x => x.PosBawahId,
+                        principalTable: "TblTitik",
+                        principalColumn: "TtkId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TblKomponenGaris",
+                columns: table => new
+                {
+                    KompGrsId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GarisId = table.Column<int>(nullable: false),
+                    KompPolaId = table.Column<int>(nullable: false),
+                    PosRelatifDiZ = table.Column<int>(nullable: false),
+                    PosZId = table.Column<int>(nullable: false),
+                    PosRelatif = table.Column<int>(nullable: false),
+                    PosRelX = table.Column<int>(nullable: false),
+                    PosRelY = table.Column<int>(nullable: false),
+                    OffsetKeKanan = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TblKomponenGaris", x => x.KompGrsId);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenGaris_TblGaris_GarisId",
+                        column: x => x.GarisId,
+                        principalTable: "TblGaris",
+                        principalColumn: "GarisId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenGaris_TblKomponenPola_KompPolaId",
+                        column: x => x.KompPolaId,
+                        principalTable: "TblKomponenPola",
+                        principalColumn: "KomPolaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TblKomponenGaris_TblTitik_PosZId",
+                        column: x => x.PosZId,
+                        principalTable: "TblTitik",
+                        principalColumn: "TtkId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -295,6 +401,55 @@ namespace RAB.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TblGaris_AkhirId",
+                table: "TblGaris",
+                column: "AkhirId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblGaris_AwalId_AkhirId",
+                table: "TblGaris",
+                columns: new[] { "AwalId", "AkhirId" },
+                unique: true,
+                filter: "[AwalId] IS NOT NULL AND [AkhirId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenGaris_KompPolaId",
+                table: "TblKomponenGaris",
+                column: "KompPolaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenGaris_PosZId",
+                table: "TblKomponenGaris",
+                column: "PosZId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenGaris_GarisId_KompPolaId_PosRelatif_PosRelX",
+                table: "TblKomponenGaris",
+                columns: new[] { "GarisId", "KompPolaId", "PosRelatif", "PosRelX" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenKoordinat_KompId",
+                table: "TblKomponenKoordinat",
+                column: "KompId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenKoordinat_KoorId",
+                table: "TblKomponenKoordinat",
+                column: "KoorId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenKoordinat_PosAtasId",
+                table: "TblKomponenKoordinat",
+                column: "PosAtasId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKomponenKoordinat_PosBawahId",
+                table: "TblKomponenKoordinat",
+                column: "PosBawahId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TblKomponenPola_KompId",
                 table: "TblKomponenPola",
                 column: "KompId");
@@ -307,14 +462,16 @@ namespace RAB.Migrations
                 filter: "[PolaId] IS NOT NULL AND [KompId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TblKoordinat_Xid",
-                table: "TblKoordinat",
-                column: "Xid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TblKoordinat_Yid",
                 table: "TblKoordinat",
                 column: "Yid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TblKoordinat_Xid_Yid",
+                table: "TblKoordinat",
+                columns: new[] { "Xid", "Yid" },
+                unique: true,
+                filter: "[Xid] IS NOT NULL AND [Yid] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TblPola_Nama",
@@ -347,16 +504,25 @@ namespace RAB.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "TblKomponenPola");
+                name: "TblKomponenGaris");
 
             migrationBuilder.DropTable(
-                name: "TblKoordinat");
+                name: "TblKomponenKoordinat");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "TblGaris");
+
+            migrationBuilder.DropTable(
+                name: "TblKomponenPola");
+
+            migrationBuilder.DropTable(
+                name: "TblKoordinat");
 
             migrationBuilder.DropTable(
                 name: "TblTitik");

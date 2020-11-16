@@ -9,9 +9,9 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="AddOrEdit" asp-route-id="@Model.KomPolId" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
+        <form asp-action="AddOrEdit" asp-route-id="@Model.KomPolaId" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="KomPolId" />
+            <input type="hidden" asp-for="KomPolaId" />
             <input type="hidden" asp-for="PolaId" value="@ViewBag.PolaId" />
 
             <div class="form-group">

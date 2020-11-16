@@ -79,7 +79,7 @@ namespace RAB.Data
             #region Komponen Pola
             builder
                 .Entity<KomponenPola>()
-                .HasKey(k => k.KomPolId);
+                .HasKey(k => k.KomPolaId);
             builder
                 .Entity<KomponenPola>()
                 .HasOne(k => k.Pola)
@@ -134,7 +134,7 @@ namespace RAB.Data
                 .Entity<KomponenGaris>()
                 .HasOne(k => k.PolaKomponen)
                 .WithMany(t => t.TblKompGaris)
-                .HasForeignKey(k => k.KompId);
+                .HasForeignKey(k => k.KompPolaId);
             //.OnDelete(DeleteBehavior.SetNull);
             builder
                 .Entity<KomponenGaris>()
@@ -143,7 +143,7 @@ namespace RAB.Data
                 .HasForeignKey(k => k.PosZId);
             builder
                 .Entity<KomponenGaris>()
-                .HasIndex(k => new { k.GarisId, k.KompId, k.PosRelatif, k.PosRelX })
+                .HasIndex(k => new { k.GarisId, k.KompPolaId, k.PosRelatif, k.PosRelX })
                 .IsUnique();
             #endregion
 

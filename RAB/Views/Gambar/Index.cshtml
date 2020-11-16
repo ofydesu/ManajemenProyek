@@ -7,6 +7,7 @@
 <div>
     <form method="get" asp-action="Index"
           data-ajax="true" data-target="#tblTampil" id="frmTarget">
+        <input type="hidden" name="dariForm" id="dariForm" value="true" />
         <div class="input-group input-group-lg">
             <div class="btn btn-primary input-group-prepend">
                 <a class="text-dark" href="@Url.Action("Index","Koordinat",new {id = "" })" id="btnLink">Tabel Koordinat</a>

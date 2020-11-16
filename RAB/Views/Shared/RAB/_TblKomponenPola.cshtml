@@ -45,7 +45,7 @@
                         @Html.DisplayFor(modelItem => item.Komponen.Nama)
                     </td>
                     <td>
-                        <form asp-action="Delete" asp-route-id="@item.KomPolId" onsubmit="return jQueryAjaxDelete(this)" class=" d-inline">
+                        <form asp-action="Delete" asp-route-id="@item.KomPolaId" onsubmit="return jQueryAjaxDelete(this)" class=" d-inline">
                             <input type="submit" value="Hapus" class="btn btn-sm btn-danger" />
                         </form>
                     </td>
